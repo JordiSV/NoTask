@@ -1,13 +1,11 @@
-package com.example.notask;
+package apiTasques;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NotaskApplication {
-
+public class ApiTasques {
     public static void main(String[] args) {
-        SpringApplication.run(NotaskApplication.class, args);
+        SpringApplication.run(ApiTasques.class, args);
     }
-
 }
