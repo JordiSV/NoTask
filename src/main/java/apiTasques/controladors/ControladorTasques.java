@@ -48,7 +48,11 @@ public class ControladorTasques {
 
     //per modificar una tasca existent
     @PutMapping("/tasques")
-    public Tasca modificarTasca(@RequestBody Tasca mod){
-        return serveiTasques.modificarTasca(mod);
+    public ResponseEntity<?> modificarTasca(@RequestBody Tasca mod){
+        Tasca t = serveiTasques.modificarTasca(mod);
+        if (t != null)
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.notFound().build();
     }
 }

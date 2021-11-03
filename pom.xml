@@ -8,14 +8,14 @@
         <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>notask</artifactId>
+    <groupId>cat.itb.projecte1</groupId>
+    <artifactId>apiusuaris</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>notask</name>
-    <description>notask</description>
-    <properties>
-        <java.version>11</java.version>
-    </properties>
+    <name>apiusuaris</name>
+    <description>API REST per gestionar usuaris</description>
+    <!--    <properties>-->
+    <!--        <java.version>11</java.version>-->
+    <!--    </properties>-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,7 +61,12 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!-- cal afegir aquest plugin per heroku, 23/10/2021-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
         </plugins>
     </build>
-
 </project>
