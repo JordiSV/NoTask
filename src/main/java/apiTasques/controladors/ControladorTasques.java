@@ -3,6 +3,8 @@ package apiTasques.controladors;
 import lombok.RequiredArgsConstructor;
 import apiTasques.model.entitats.Tasca;
 import apiTasques.model.serveis.ServeiTasques;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,19 +25,25 @@ public class ControladorTasques {
     }
 
     @GetMapping("/tasques/{id}")
-    public Tasca consultarTasca(@PathVariable String id)
+    public ResponseEntity<?> consultarTasca(@PathVariable String id)
     {
-        return serveiTasques.consultarTasca(id);
+        Tasca t = serveiTasques.consultarTasca(id);
+        if (t != null)
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/tasques")
-    public Tasca crearUsuari(@RequestBody Tasca nou){
-        return serveiTasques.afegirTasca(nou);
+    public ResponseEntity<Tasca> crearUsuari(@RequestBody Tasca nou){
+        serveiTasques.afegirTasca(nou);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nou);
     }
 
     @DeleteMapping("/tasques/{id}")
-    public Tasca eliminarTasca(@PathVariable String id){
-        return serveiTasques.eliminarTasca(id);
+    public ResponseEntity<?> eliminarTasca(@PathVariable String id){
+        serveiTasques.eliminarTasca(id);
+        return ResponseEntity.noContent().header("Content-Length", "0").build();
     }
 
     //per modificar una tasca existent
