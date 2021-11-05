@@ -28,8 +28,10 @@ public class ControladorTasques {
     public ResponseEntity<?> consultarTasca(@PathVariable String id)
     {
         Tasca t = serveiTasques.consultarTasca(id);
-        if (t != null)
+        if (t != null) {
+            serveiTasques.consultarTasca(id);
             return ResponseEntity.ok().build();
+        }
         else
             return ResponseEntity.notFound().build();
     }
