@@ -19,33 +19,35 @@ public class ControladorTasques {
     //pel seu corresponent retornant un ResponseEntity
 
 
-    @GetMapping("/tasques")
+    @GetMapping("/todoitems")
     public List<Tasca> llistarTasques(){
         return serveiTasques.llistarTasques();
     }
 
-    @GetMapping("/tasques/{id}")
+    @GetMapping("/todoitems/{id}")
     public ResponseEntity<?> consultarTasca(@PathVariable String id)
     {
         Tasca t = serveiTasques.consultarTasca(id);
-        serveiTasques.consultarTasca(id);
-        return ResponseEntity.ok().build();
+        if (t!=null){
+            return ResponseEntity.status(HttpStatus.OK).body(t);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping("/tasques")
+    @PostMapping("/todoitems")
     public ResponseEntity<Tasca> crearUsuari(@RequestBody Tasca nou){
         serveiTasques.afegirTasca(nou);
         return ResponseEntity.status(HttpStatus.CREATED).body(nou);
     }
 
-    @DeleteMapping("/tasques/{id}")
+    @DeleteMapping("/todoitems/{id}")
     public ResponseEntity<?> eliminarTasca(@PathVariable String id){
         serveiTasques.eliminarTasca(id);
         return ResponseEntity.noContent().header("Content-Length", "0").build();
     }
 
     //per modificar una tasca existent
-    @PutMapping("/tasques")
+    @PutMapping("/todoitems")
     public ResponseEntity<?> modificarTasca(@RequestBody Tasca mod){
         Tasca t = serveiTasques.modificarTasca(mod);
         if (t != null)
