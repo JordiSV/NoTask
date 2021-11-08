@@ -42,8 +42,13 @@ public class ControladorTasques {
 
     @DeleteMapping("/todoitems/{id}")
     public ResponseEntity<?> eliminarTasca(@PathVariable String id){
-        serveiTasques.eliminarTasca(id);
-        return ResponseEntity.noContent().header("Content-Length", "0").build();
+        Tasca t = serveiTasques.consultarTasca(id);
+        if (t == null)
+            return ResponseEntity.notFound().build();
+        else{
+            serveiTasques.eliminarTasca(id);
+            return ResponseEntity.noContent().header("Content-Length", "0").build();
+        }
     }
 
     //per modificar una tasca existent
