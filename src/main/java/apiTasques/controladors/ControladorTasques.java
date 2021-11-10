@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ControladorTasques {
     private final ServeiTasques serveiTasques;
+    private final ServeiListas serveiListas;
 
     //TODO
     //Amb l'exemple de l'altre controlador cal canviar el retorn d'aquests endpoints
@@ -34,10 +35,15 @@ public class ControladorTasques {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PostMapping("/todoitems")
-    public ResponseEntity<Tasca> crearUsuari(@RequestBody Tasca nou){
-        serveiTasques.afegirTasca(nou);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+    @PostMapping("/todolists/{idLlista}/todoitems")
+    public ResponseEntity<?> crearTasca(@PathVariable String idLlista,@RequestBody Tasca nou){
+        Lista l = serveiListas.consultarLista(idLlista);
+        if (l!=null){
+            serveiTasques.afegirTasca(nou);
+            l.getTasques().add(nou);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("/todoitems/{id}")
