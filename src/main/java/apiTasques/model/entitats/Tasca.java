@@ -12,4 +12,6 @@ public class Tasca {
     private String idTasca;
     private String nom;
     private String type;
+    private boolean feta;
+
 }
