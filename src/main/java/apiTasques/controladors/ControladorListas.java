@@ -62,4 +62,11 @@ public class ControladorListas {
         else
             return ResponseEntity.notFound().build();
     }
+
+    public ResponseEntity<?> afegirTasca(Tasca t, String id) {
+        if (serveiListas.afegirTasca(t, id) != null)
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.notFound().build();
+    }
 }

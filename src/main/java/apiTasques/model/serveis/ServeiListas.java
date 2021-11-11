@@ -31,8 +31,12 @@ public class ServeiListas {
 
     //modificar sencer, si existeix el canvia, sino retorna null
     public Lista modificarLista(Lista it){
+        List<Tasca> tl = repoLista.getById(it.getIdLista()).getTasques();
         Lista aux = null;
-        if(repoLista.existsById(it.getIdLista())) aux = repoLista.save(it);
+        if(repoLista.existsById(it.getIdLista())){
+            it.setTasques(tl);
+            aux = repoLista.save(it);
+        }
         return aux;
     }
 
@@ -42,5 +46,19 @@ public class ServeiListas {
         Lista res= repoLista.findById(id).orElse(null);
         if(res!=null) repoLista.deleteById(id);
         return res;
+    }
+
+    public Lista afegirTasca(Tasca t, String idLista) {
+        Lista list = repoLista.getById(idLista);
+        list.getTasques().add(t);
+        modificarLista(list);
+        return list;
+    }
+
+    public Lista eliminarTasca(String idTasca, String idLista) {
+        Lista l = repoLista.getById(idLista);
+        l.getTasques().removeIf(t -> t.getIdTasca().equals(idTasca));
+        modificarLista(l);
+        return l;
     }
 }

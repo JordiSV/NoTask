@@ -1,5 +1,7 @@
 package apiTasques.controladors;
 
+import apiTasques.model.entitats.Lista;
+import apiTasques.model.serveis.ServeiListas;
 import lombok.RequiredArgsConstructor;
 import apiTasques.model.entitats.Tasca;
 import apiTasques.model.serveis.ServeiTasques;
