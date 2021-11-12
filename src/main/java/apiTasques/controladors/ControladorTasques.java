@@ -39,13 +39,9 @@ public class ControladorTasques {
 
     @PostMapping("/todolists/{idLlista}/todoitems")
     public ResponseEntity<?> crearTasca(@PathVariable String idLlista,@RequestBody Tasca nou){
-        Lista l = serveiListas.consultarLista(idLlista);
-        if (l!=null){
-            serveiTasques.afegirTasca(nou);
-            l.getTasques().add(nou);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nou);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        serveiTasques.afegirTasca(nou);
+        controladorListas.afegirTasca(idLlista, nou);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nou);
     }
 
     @DeleteMapping("/todoitems/{id}")
