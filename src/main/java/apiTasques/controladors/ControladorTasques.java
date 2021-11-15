@@ -16,22 +16,33 @@ import java.util.List;
 public class ControladorTasques {
     private final ServeiTasques serveiTasques;
     private final ServeiListas serveiListas;
+    private final ControladorListas controladorListas;
 
-    //TODO
-    //Amb l'exemple de l'altre controlador cal canviar el retorn d'aquests endpoints
-    //pel seu corresponent retornant un ResponseEntity
-
-
+    //
     @GetMapping("/todoitems")
-    public List<Tasca> llistarTasques(){
-        return serveiTasques.llistarTasques();
+    public ResponseEntity<?> llistarTasques(){
+        List<Tasca> l = serveiTasques.llistarTasques();
+        if (l != null){
+            return ResponseEntity.ok(l);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/todoitems/{id}")
-    public ResponseEntity<?> consultarTasca(@PathVariable String id)
+    @GetMapping("/todolists/{idLista}/todoitems")
+    public ResponseEntity<?> llistarTasquesLista(@PathVariable String idLista){
+        List<Tasca> tascas = serveiListas.consultarTasquesFromLlista(idLista);
+        if (tascas != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(tascas);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/todolists/{idLlista}/todoitems/{id}")
+    public ResponseEntity<?> consultarTasca(@PathVariable String idList, @PathVariable String id)
     {
-        Tasca t = serveiTasques.consultarTasca(id);
-        if (t!=null){
+        Tasca t = serveiListas.consultarTasca(id, idList);
+        if (t != null) {
             return ResponseEntity.status(HttpStatus.OK).body(t);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -40,27 +51,32 @@ public class ControladorTasques {
     @PostMapping("/todolists/{idLlista}/todoitems")
     public ResponseEntity<?> crearTasca(@PathVariable String idLlista,@RequestBody Tasca nou){
         serveiTasques.afegirTasca(nou);
-        controladorListas.afegirTasca(idLlista, nou);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+        Lista l = controladorListas.afegirTasca(nou, idLlista);
+        if (l != null){
+            return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/todoitems/{id}")
-    public ResponseEntity<?> eliminarTasca(@PathVariable String id){
-        Tasca t = serveiTasques.consultarTasca(id);
-        if (t == null)
+    @DeleteMapping("/todolists/{idLlista}/todoitems/{id}")
+    public ResponseEntity<?> eliminarTasca(@PathVariable String idLlista, @PathVariable String id){
+        Lista l = serveiListas.eliminarTasca(id, idLlista);
+        if (l == null)
             return ResponseEntity.notFound().build();
         else{
-            serveiTasques.eliminarTasca(id);
+            Tasca t = serveiTasques.eliminarTasca(id);
             return ResponseEntity.noContent().header("Content-Length", "0").build();
         }
     }
 
     //per modificar una tasca existent
-    @PutMapping("/todoitems")
-    public ResponseEntity<?> modificarTasca(@RequestBody Tasca mod){
+    @PutMapping("/todolists/{idLlista}/todoitems")
+    public ResponseEntity<?> modificarTasca(@PathVariable String idLlista, @RequestBody Tasca mod){
         Tasca t = serveiTasques.modificarTasca(mod);
-        if (t != null)
+        if (t != null) {
+            Lista l = serveiListas.modificarTasca(idLlista, mod);
             return ResponseEntity.ok().build();
+        }
         else
             return ResponseEntity.notFound().build();
     }

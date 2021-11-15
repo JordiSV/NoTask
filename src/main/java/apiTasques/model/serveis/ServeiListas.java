@@ -49,9 +49,11 @@ public class ServeiListas {
     }
 
     public Lista afegirTasca(Tasca t, String idLista) {
-        Lista list = repoLista.getById(idLista);
-        list.getTasques().add(t);
-        modificarLista(list);
+        Lista list = repoLista.findById(idLista).orElse(null);
+        if (list != null) {
+            list.getTasques().add(t);
+            modificarLista(list);
+        }
         return list;
     }
 
@@ -59,6 +61,30 @@ public class ServeiListas {
         Lista l = repoLista.getById(idLista);
         l.getTasques().removeIf(t -> t.getIdTasca().equals(idTasca));
         modificarLista(l);
+        return l;
+    }
+
+    public Tasca consultarTasca(String id, String idLista){
+        Lista l = repoLista.getById(idLista);
+        Tasca t = null;
+        for (Tasca task : l.getTasques()) {
+            if (task.getIdTasca().equals(id))
+                t = task;
+        }
+        return t;
+    }
+
+    public List<Tasca> consultarTasquesFromLlista(String idLista) {
+        return repoLista.findById(idLista).get().getTasques();
+    }
+
+    public Lista modificarTasca(String id, Tasca t) {
+        Lista l = repoLista.getById(id);
+
+        for (Tasca tascaOld : l.getTasques()) {
+            if (tascaOld.getIdTasca().equals(id))
+                tascaOld = t;
+        }
         return l;
     }
 }

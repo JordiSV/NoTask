@@ -2,6 +2,7 @@ package apiTasques.model.entitats;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -15,6 +16,6 @@ public class Lista {
     private String nom;
     private String type;
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tasca> tasques;
 }

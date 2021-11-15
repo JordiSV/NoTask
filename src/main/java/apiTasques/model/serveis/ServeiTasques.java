@@ -38,9 +38,10 @@ public class ServeiTasques {
 
     //eliminar ítem per id
     //si no existeix id retorna null
-    public Tasca eliminarTasca(String idList){
-        Tasca res= repoTasques.findById(idList).orElse(null);
-        if(res!=null) repoTasques.deleteById(idList);
+    public Tasca eliminarTasca(String id){
+        Tasca res= repoTasques.findById(id).orElse(null);
+        if(res!=null)
+            repoTasques.deleteById(id);
         return res;
     }
 
