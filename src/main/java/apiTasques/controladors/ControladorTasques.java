@@ -28,9 +28,9 @@ public class ControladorTasques {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @GetMapping("/todolists/{idLista}/todoitems")
-    public ResponseEntity<?> llistarTasquesLista(@PathVariable String idLista){
-        List<Tasca> tascas = serveiListas.consultarTasquesFromLlista(idLista);
+    @GetMapping("/todolists/{idLlista}/todoitems")
+    public ResponseEntity<?> llistarTasquesLista(@PathVariable String idLlista){
+        List<Tasca> tascas = serveiListas.consultarTasquesFromLlista(idLlista);
         if (tascas != null) {
             return ResponseEntity.status(HttpStatus.OK).body(tascas);
         } else {
@@ -38,10 +38,10 @@ public class ControladorTasques {
         }
     }
 
-    @GetMapping("/todolists/{idLlista}/todoitems/{id}")
-    public ResponseEntity<?> consultarTasca(@PathVariable String idList, @PathVariable String id)
+    @GetMapping("/todolists/{idLlista}/todoitems/{idTasca}")
+    public ResponseEntity<?> consultarTasca(@PathVariable String idLlist, @PathVariable String idTasca)
     {
-        Tasca t = serveiListas.consultarTasca(id, idList);
+        Tasca t = serveiListas.consultarTasca(idTasca, idLlist);
         if (t != null) {
             return ResponseEntity.status(HttpStatus.OK).body(t);
         }
@@ -58,13 +58,13 @@ public class ControladorTasques {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/todolists/{idLlista}/todoitems/{id}")
-    public ResponseEntity<?> eliminarTasca(@PathVariable String idLlista, @PathVariable String id){
-        Lista l = serveiListas.eliminarTasca(id, idLlista);
+    @DeleteMapping("/todolists/{idLlista}/todoitems/{idTasca}")
+    public ResponseEntity<?> eliminarTasca(@PathVariable String idLlista, @PathVariable String idTasca){
+        Lista l = serveiListas.eliminarTasca(idTasca, idLlista);
         if (l == null)
             return ResponseEntity.notFound().build();
         else{
-            Tasca t = serveiTasques.eliminarTasca(id);
+            Tasca t = serveiTasques.eliminarTasca(idTasca);
             return ResponseEntity.noContent().header("Content-Length", "0").build();
         }
     }

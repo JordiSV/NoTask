@@ -26,10 +26,10 @@ public class ControladorListas {
         return serveiListas.llistarListas();
     }
 
-    @GetMapping("/todolists/{id}")
-    public ResponseEntity<?> consultarLista(@PathVariable String id)
+    @GetMapping("/todolists/{idLlista}")
+    public ResponseEntity<?> consultarLista(@PathVariable String idLlista)
     {
-        Lista l = serveiListas.consultarLista(id);
+        Lista l = serveiListas.consultarLista(idLlista);
         if (l != null){
             return ResponseEntity.status(HttpStatus.OK).body(l);
         }
@@ -42,13 +42,13 @@ public class ControladorListas {
         return ResponseEntity.status(HttpStatus.CREATED).body(nou);
     }
 
-    @DeleteMapping("/todolists/{id}")
-    public ResponseEntity<?> eliminarLista(@PathVariable String id){
-        Lista l = serveiListas.consultarLista(id);
+    @DeleteMapping("/todolists/{idLlista}")
+    public ResponseEntity<?> eliminarLista(@PathVariable String idLlista){
+        Lista l = serveiListas.consultarLista(idLlista);
         if (l == null)
             return ResponseEntity.notFound().build();
         else{
-            serveiListas.eliminarLista(id);
+            serveiListas.eliminarLista(idLlista);
             return ResponseEntity.noContent().header("Content-Length", "0").build();
         }
     }
