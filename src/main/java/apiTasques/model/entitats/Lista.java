@@ -2,17 +2,15 @@ package apiTasques.model.entitats;
 
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
 public class Lista {
     @Id
-    private String idLista;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idLista;
     private String nom;
     private String type;
 

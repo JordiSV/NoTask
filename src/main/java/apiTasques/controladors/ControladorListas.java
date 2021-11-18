@@ -27,7 +27,7 @@ public class ControladorListas {
     }
 
     @GetMapping("/todolists/{idLlista}")
-    public ResponseEntity<?> consultarLista(@PathVariable String idLlista)
+    public ResponseEntity<?> consultarLista(@PathVariable long idLlista)
     {
         Lista l = serveiListas.consultarLista(idLlista);
         if (l != null){
@@ -43,7 +43,7 @@ public class ControladorListas {
     }
 
     @DeleteMapping("/todolists/{idLlista}")
-    public ResponseEntity<?> eliminarLista(@PathVariable String idLlista){
+    public ResponseEntity<?> eliminarLista(@PathVariable long idLlista){
         Lista l = serveiListas.consultarLista(idLlista);
         if (l == null)
             return ResponseEntity.notFound().build();
@@ -63,7 +63,7 @@ public class ControladorListas {
             return ResponseEntity.notFound().build();
     }
 
-    public Lista afegirTasca(Tasca t, String id) {
+    public Lista afegirTasca(Tasca t, long id) {
         return serveiListas.afegirTasca(t, id);
     }
 }

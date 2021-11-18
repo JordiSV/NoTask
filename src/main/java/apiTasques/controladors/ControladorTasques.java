@@ -29,7 +29,7 @@ public class ControladorTasques {
     }
 
     @GetMapping("/todolists/{idLlista}/todoitems")
-    public ResponseEntity<?> llistarTasquesLista(@PathVariable String idLlista){
+    public ResponseEntity<?> llistarTasquesLista(@PathVariable long idLlista){
         List<Tasca> tascas = serveiListas.consultarTasquesFromLlista(idLlista);
         if (tascas != null) {
             return ResponseEntity.status(HttpStatus.OK).body(tascas);
@@ -39,7 +39,7 @@ public class ControladorTasques {
     }
 
     @GetMapping("/todolists/{idLlista}/todoitems/{idTasca}")
-    public ResponseEntity<?> consultarTasca(@PathVariable String idLlist, @PathVariable String idTasca)
+    public ResponseEntity<?> consultarTasca(@PathVariable long idLlist, @PathVariable long idTasca)
     {
         Tasca t = serveiListas.consultarTasca(idTasca, idLlist);
         if (t != null) {
@@ -49,7 +49,7 @@ public class ControladorTasques {
     }
 
     @PostMapping("/todolists/{idLlista}/todoitems")
-    public ResponseEntity<?> crearTasca(@PathVariable String idLlista,@RequestBody Tasca nou){
+    public ResponseEntity<?> crearTasca(@PathVariable long idLlista,@RequestBody Tasca nou){
         serveiTasques.afegirTasca(nou);
         Lista l = controladorListas.afegirTasca(nou, idLlista);
         if (l != null){
@@ -59,7 +59,7 @@ public class ControladorTasques {
     }
 
     @DeleteMapping("/todolists/{idLlista}/todoitems/{idTasca}")
-    public ResponseEntity<?> eliminarTasca(@PathVariable String idLlista, @PathVariable String idTasca){
+    public ResponseEntity<?> eliminarTasca(@PathVariable long idLlista, @PathVariable long idTasca){
         Lista l = serveiListas.eliminarTasca(idTasca, idLlista);
         if (l == null)
             return ResponseEntity.notFound().build();
@@ -71,7 +71,7 @@ public class ControladorTasques {
 
     //per modificar una tasca existent
     @PutMapping("/todolists/{idLlista}/todoitems")
-    public ResponseEntity<?> modificarTasca(@PathVariable String idLlista, @RequestBody Tasca mod){
+    public ResponseEntity<?> modificarTasca(@PathVariable long idLlista, @RequestBody Tasca mod){
         Tasca t = serveiTasques.modificarTasca(mod);
         if (t != null) {
             Lista l = serveiListas.modificarTasca(idLlista, mod);

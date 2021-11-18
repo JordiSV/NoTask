@@ -20,7 +20,7 @@ public class ServeiTasques {
     }
 
     //consultar ítem per id
-    public Tasca consultarTasca(String id){
+    public Tasca consultarTasca(long id){
         return repoTasques.findById(id).orElse(null);
     }
 
@@ -38,7 +38,7 @@ public class ServeiTasques {
 
     //eliminar ítem per id
     //si no existeix id retorna null
-    public Tasca eliminarTasca(String id){
+    public Tasca eliminarTasca(long id){
         Tasca res= repoTasques.findById(id).orElse(null);
         if(res!=null)
             repoTasques.deleteById(id);

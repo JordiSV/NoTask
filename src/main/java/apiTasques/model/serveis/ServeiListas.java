@@ -20,7 +20,7 @@ public class ServeiListas {
     }
 
     //consultar ítem per id
-    public Lista consultarLista(String id){
+    public Lista consultarLista(long id){
         return repoLista.findById(id).orElse(null);
     }
 
@@ -42,13 +42,13 @@ public class ServeiListas {
 
     //eliminar ítem per id
     //si no existeix id retorna null
-    public Lista eliminarLista(String id){
+    public Lista eliminarLista(long id){
         Lista res= repoLista.findById(id).orElse(null);
         if(res!=null) repoLista.deleteById(id);
         return res;
     }
 
-    public Lista afegirTasca(Tasca t, String idLista) {
+    public Lista afegirTasca(Tasca t, long idLista) {
         Lista list = repoLista.findById(idLista).orElse(null);
         if (list != null) {
             list.getTasques().add(t);
@@ -57,32 +57,32 @@ public class ServeiListas {
         return list;
     }
 
-    public Lista eliminarTasca(String idTasca, String idLista) {
+    public Lista eliminarTasca(long idTasca, long idLista) {
         Lista l = repoLista.getById(idLista);
-        l.getTasques().removeIf(t -> t.getIdTasca().equals(idTasca));
+        l.getTasques().removeIf(t -> t.getIdTasca() == idTasca);
         modificarLista(l);
         return l;
     }
 
-    public Tasca consultarTasca(String id, String idLista){
+    public Tasca consultarTasca(long id, long idLista){
         Lista l = repoLista.getById(idLista);
         Tasca t = null;
         for (Tasca task : l.getTasques()) {
-            if (task.getIdTasca().equals(id))
+            if (task.getIdTasca() == id)
                 t = task;
         }
         return t;
     }
 
-    public List<Tasca> consultarTasquesFromLlista(String idLista) {
+    public List<Tasca> consultarTasquesFromLlista(long idLista) {
         return repoLista.findById(idLista).get().getTasques();
     }
 
-    public Lista modificarTasca(String id, Tasca t) {
+    public Lista modificarTasca(long id, Tasca t) {
         Lista l = repoLista.getById(id);
 
         for (Tasca tascaOld : l.getTasques()) {
-            if (tascaOld.getIdTasca().equals(id))
+            if (tascaOld.getIdTasca() == id)
                 tascaOld = t;
         }
         return l;
