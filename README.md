@@ -1,9 +1,9 @@
 # NoTask
 
 ## Important
-
+Link d'heroku : https://no-task.herokuapp.com
 ### Llistes
-Les llistes compten amb Id(String), Nom(String), Type(String), Tasques(pot ser null y afegir-ne després).
+Les llistes compten amb Id(long automatic), Nom(String), Type(String), Tasques(pot ser null y afegir-ne després).
 * Mostrar llistes | /todolists
 * Consultar una llista | /todolists/{idLlista}
 * Afegir una llista | /todolists
@@ -11,7 +11,7 @@ Les llistes compten amb Id(String), Nom(String), Type(String), Tasques(pot ser n
 * Eliminar una llista | "/todolists/{idLlista}
 
 ### Tasques
-Les tasques compten amb Id(String), Nom(String), Type(String), Feta(Boolean)
+Les tasques compten amb Id(long automatic), Nom(String), Type(String), Feta(Boolean)
 * Consultar totes les tasques /todoitems
 * Consultar les tasques d'una llista | /todolists/{idLlista}/todoitems
 * Consultar una tasca | /todolists{idLlista}/todoitems/{idTasca}
