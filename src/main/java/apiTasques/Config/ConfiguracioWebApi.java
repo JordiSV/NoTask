@@ -1,4 +1,4 @@
-package cat.itb.projecte1.apiusuaris.configuracio;
+package apiTasques.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class ConfiguracioWebApi {
 
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/todoitems/**")
+                registry.addMapping("/**")
                         //.allowedOrigins("http://localhost:9001")
                         .allowedOrigins("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
