@@ -31,17 +31,6 @@ public class ServeiUsuari {
         return repoUsuari.save(us);
     }
 
-    //modificar sencer, si existeix el canvia, sino retorna null
-    public Usuari modificarUsuari(Usuari us){
-        List<Lista> ul = repoUsuari.getById(us.getIdUsuari()).getListas();
-        Usuari aux = null;
-        if (repoUsuari.existsById(us.getIdUsuari())){
-            us.setListas(ul);
-            aux = repoUsuari.save(us);
-        }
-        return aux;
-    }
-
     //eliminar ítem per id
     //si no existeix id retorna null
     public Usuari eliminarUsuari(long id){
@@ -53,8 +42,9 @@ public class ServeiUsuari {
     public Usuari afegitLlista(Lista l, long idUsu){
         Usuari us = repoUsuari.findById(idUsu).orElse(null);
         if (us != null){
-            us.getListas().add(l);
-            modificarUsuari(us);
+            List<Lista> listas = us.getListas();
+            listas.add(l);
+            us.setListas(listas);
         }
         return us;
     }

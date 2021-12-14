@@ -36,7 +36,7 @@ public class ControladorUsuaris {
         return ResponseEntity.status(HttpStatus.CREATED).body(nou);
     }
 
-    @PostMapping("/users/{idUsuari}")
+    @DeleteMapping("/users/{idUsuari}")
     public ResponseEntity<?> eliminarUsuari(@PathVariable long idUsuari){
         Usuari u = serveiUsuari.consultarUsuari(idUsuari);
         if (u == null){
@@ -46,4 +46,9 @@ public class ControladorUsuaris {
             return ResponseEntity.noContent().header("Content-Length", "0").build();
         }
     }
+
+    public Usuari agefirLlista(Lista l, long id){
+        return serveiUsuari.afegitLlista(l,id);
+    }
+
 }
