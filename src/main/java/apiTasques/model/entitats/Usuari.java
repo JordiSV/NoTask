@@ -11,7 +11,7 @@ public class Usuari {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idUsuari;
-    private String user;
+    private String userName;
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

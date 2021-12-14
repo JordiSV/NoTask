@@ -6,9 +6,7 @@ import apiTasques.model.serveis.ServeiUsuari;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,22 @@ public class ControladorUsuaris {
             return ResponseEntity.status(HttpStatus.OK).body(us);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<?> crearUsuari(@RequestBody Usuari nou){
+        serveiUsuari.afegirUsuari(nou);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+    }
+
+    @PostMapping("/users/{idUsuari}")
+    public ResponseEntity<?> eliminarUsuari(@PathVariable long idUsuari){
+        Usuari u = serveiUsuari.consultarUsuari(idUsuari);
+        if (u == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            serveiUsuari.eliminarUsuari(idUsuari);
+            return ResponseEntity.noContent().header("Content-Length", "0").build();
+        }
     }
 }
