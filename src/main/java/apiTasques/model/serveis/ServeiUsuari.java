@@ -42,20 +42,19 @@ public class ServeiUsuari {
     public Usuari afegitLlista(Lista l, long idUsu){
         Usuari us = repoUsuari.findById(idUsu).orElse(null);
         if (us != null){
-            List<Lista> listas = us.getListas();
-            listas.add(l);
-            us.setListas(listas);
+            us.getListas().add(l);
+            repoUsuari.save(us);
         }
         return us;
     }
 
-    public Usuari eliminarLlista(long idLista, long idUsuari){
+    public Usuari eliminarLlista(long idUsuari, long idLista){
         Usuari us = repoUsuari.getById(idUsuari);
         us.getListas().removeIf(t -> t.getIdLista() == idLista);
         return us;
     }
 
-    public Lista consultarLlista(long idLlista, long idUsuari){
+    public Lista consultarLlista(long idUsuari, long idLlista){
         Usuari us = repoUsuari.getById(idUsuari);
         Lista l = null;
         for (Lista list : us.getListas()){
@@ -66,8 +65,25 @@ public class ServeiUsuari {
         return l;
     }
 
+
     public List<Lista> consultarTotesLesLlistes(long idUsuari){
         return repoUsuari.findById(idUsuari).get().getListas();
     }
 
+    public List<Tasca> consultarTasquesLListaUsuari(long idUsuari, long idLlista){
+        Lista l = consultarLlista(idUsuari, idLlista);
+        return l.getTasques();
+    }
+
+    public Usuari modificarLlista(long id, Lista l){
+        Usuari us = repoUsuari.getById(id);
+
+        for (Lista listaOld : us.getListas()){
+            if (listaOld.getIdLista() == id){
+                listaOld = l;
+            }
+        }
+
+        return us;
+    }
 }

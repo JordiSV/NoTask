@@ -2,6 +2,7 @@ package apiTasques.controladors;
 
 import apiTasques.model.entitats.Lista;
 import apiTasques.model.serveis.ServeiListas;
+import apiTasques.model.serveis.ServeiUsuari;
 import lombok.RequiredArgsConstructor;
 import apiTasques.model.entitats.Tasca;
 import apiTasques.model.serveis.ServeiTasques;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ControladorTasques {
     private final ServeiTasques serveiTasques;
     private final ServeiListas serveiListas;
-    private final ControladorListas controladorListas;
+    private final ServeiUsuari serveiUsuari;
 
     //
     @GetMapping("/todoitems")
@@ -51,7 +52,7 @@ public class ControladorTasques {
     @PostMapping("/todolists/{idLlista}/todoitems")
     public ResponseEntity<?> crearTasca(@PathVariable long idLlista,@RequestBody Tasca nou){
         serveiTasques.afegirTasca(nou);
-        Lista l = controladorListas.afegirTasca(nou, idLlista);
+        Lista l = serveiListas.afegirTasca(nou, idLlista);
         if (l != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(nou);
         }
@@ -78,6 +79,57 @@ public class ControladorTasques {
             return ResponseEntity.ok().build();
         }
         else
+            return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/users/{idUsuari}/todolists/{idLlista}/todoitems")
+    public ResponseEntity<?> llistarTasquesLlistesUsuari(@PathVariable long idUsuari, @PathVariable long idLlista){
+        List<Tasca> tascas = serveiUsuari.consultarTasquesLListaUsuari(idUsuari, idLlista);
+        if (tascas != null){
+            return ResponseEntity.status(HttpStatus.OK).body(tascas);
+        }else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @GetMapping("/users/{idUsuari}/todolists/{idLlista}/todoitems/{idTasca}")
+    public ResponseEntity<?> llistarTascaLlistesUsuari(@PathVariable long idUsuari, @PathVariable long idLlista, @PathVariable long idTasca){
+        Lista l = serveiUsuari.consultarLlista(idUsuari, idLlista);
+        if (l != null){
+            Tasca t = serveiListas.consultarTasca(idTasca, l.getIdLista());
+            if (t != null){
+                return ResponseEntity.status(HttpStatus.OK).body(t);
+            }else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @PostMapping("/users/{idUsuari}/todolists/{idLlista}/todoitems")
+    public ResponseEntity<?> crearTascaLlistaUsuari(@PathVariable long idUsuari, @PathVariable long idLlista, @RequestBody Tasca nou){
+        serveiTasques.afegirTasca(nou);
+        Lista l = serveiListas.afegirTasca(nou,idLlista);
+        if (l != null){
+            return ResponseEntity.status(HttpStatus.CREATED).body(nou);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/users/{idUsuari}/todolists/{idLlista}/todoitems/{idTasca}")
+    public ResponseEntity<?> deleteTascaLlistaUsuari(@PathVariable long idUsuari, @PathVariable long idLlista, @PathVariable long idTasca){
+        Lista l = serveiUsuari.consultarLlista(idUsuari, idLlista);
+        if (l != null){
+            Lista delete = serveiListas.eliminarTasca(idTasca, l.getIdLista());
+            if (delete == null)
+                return ResponseEntity.notFound().build();
+            else{
+                Tasca t = serveiTasques.eliminarTasca(idTasca);
+                if (t != null) {
+                    return ResponseEntity.noContent().header("Content-Length", "0").build();
+                }else
+                    return ResponseEntity.notFound().build();
+            }
+        }else
             return ResponseEntity.notFound().build();
     }
 }

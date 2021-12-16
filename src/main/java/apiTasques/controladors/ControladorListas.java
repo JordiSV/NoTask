@@ -17,7 +17,6 @@ import java.util.List;
 public class ControladorListas {
     private final ServeiListas serveiListas;
     private final ServeiUsuari serveiUsuari;
-    private final ControladorUsuaris controladorUsuaris;
 
     //TODO
     //Amb l'exemple de l'altre controlador cal canviar el retorn d'aquests endpoints
@@ -80,7 +79,7 @@ public class ControladorListas {
     }
 
     @GetMapping("/users/{idUsuari}/todolists/{idLlista}")
-    public ResponseEntity<?> consultarLlista(@PathVariable long idUsuari, @PathVariable long idLlista){
+    public ResponseEntity<?> consultarLlistaUsuari(@PathVariable long idUsuari, @PathVariable long idLlista){
         Lista l = serveiUsuari.consultarLlista(idUsuari, idLlista);
         if (l != null){
             return ResponseEntity.status(HttpStatus.OK).body(l);
@@ -89,13 +88,35 @@ public class ControladorListas {
     }
 
     @PostMapping("/users/{idUsuari}/todolists")
-    public ResponseEntity<?> crearLlista(@PathVariable long idUsuari, @RequestBody Lista nou){
+    public ResponseEntity<?> crearLlistaUsuari(@PathVariable long idUsuari, @RequestBody Lista nou){
         serveiListas.afegirLista(nou);
-        Usuari u = controladorUsuaris.agefirLlista(nou, idUsuari);
+        Usuari u = serveiUsuari.afegitLlista(nou, idUsuari);
         if (u != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(nou);
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @DeleteMapping("/users/{idUsuari}/todolists/{idLlista}")
+    public ResponseEntity<?> deleteLlistUsuari(@PathVariable long idUsuari, @PathVariable long idLlista){
+        Usuari us = serveiUsuari.eliminarLlista(idUsuari, idLlista);
+        if (us == null)
+            return ResponseEntity.notFound().build();
+        else{
+            Lista l = serveiListas.eliminarLista(idLlista);
+            return ResponseEntity.noContent().header("Content-Length", "0").build();
+        }
+    }
+
+    @PutMapping("/users/{idUsuari}/todolists")
+    public ResponseEntity<?> modificarLlistaUsuari(@PathVariable long idUsuari, @RequestBody Lista mod){
+        Lista l = serveiListas.modificarLista(mod);
+        if (l != null){
+            Usuari us = serveiUsuari.modificarLlista(idUsuari, mod);
+            return ResponseEntity.ok().build();
+        }
+        else
+            return ResponseEntity.notFound().build();
     }
 }
