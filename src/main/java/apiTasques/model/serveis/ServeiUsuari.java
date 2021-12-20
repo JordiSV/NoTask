@@ -1,6 +1,5 @@
 package apiTasques.model.serveis;
 
-import antlr.collections.impl.LList;
 import apiTasques.model.entitats.Lista;
 import apiTasques.model.entitats.Tasca;
 import apiTasques.model.entitats.Usuari;
@@ -39,6 +38,22 @@ public class ServeiUsuari {
         return res;
     }
 
+    public Usuari modificarUsuari(Usuari us){
+        Usuari nul = repoUsuari.findById(us.getIdUsuari()).orElse(null);
+        if (nul != null) {
+            List<Lista> tl = repoUsuari.getById(us.getIdUsuari()).getListas();
+            Usuari aux = null;
+            System.out.println(aux);
+            if (repoUsuari.existsById(us.getIdUsuari())) {
+                us.setListas(tl);
+                aux = repoUsuari.save(us);
+            }
+            System.out.println(aux);
+            return aux;
+        }
+        return nul;
+    }
+
     public Usuari afegitLlista(Lista l, long idUsu){
         Usuari us = repoUsuari.findById(idUsu).orElse(null);
         if (us != null){
@@ -49,9 +64,12 @@ public class ServeiUsuari {
     }
 
     public Usuari eliminarLlista(long idUsuari, long idLista){
-        Usuari us = repoUsuari.getById(idUsuari);
-        us.getListas().removeIf(t -> t.getIdLista() == idLista);
-        return us;
+        Usuari us = repoUsuari.findById(idUsuari).orElse(null);
+        if (us != null) {
+            us.getListas().removeIf(t -> t.getIdLista() == idLista);
+            return us;
+        }else
+            return us;
     }
 
     public Lista consultarLlista(long idUsuari, long idLlista){

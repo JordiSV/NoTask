@@ -31,13 +31,17 @@ public class ServeiListas {
 
     //modificar sencer, si existeix el canvia, sino retorna null
     public Lista modificarLista(Lista it){
-        List<Tasca> tl = repoLista.getById(it.getIdLista()).getTasques();
-        Lista aux = null;
-        if(repoLista.existsById(it.getIdLista())){
-            it.setTasques(tl);
-            aux = repoLista.save(it);
+        Lista lt = repoLista.findById(it.getIdLista()).orElse(null);
+        if (lt != null) {
+            List<Tasca> tl = repoLista.getById(it.getIdLista()).getTasques();
+            Lista aux = null;
+            if (repoLista.existsById(it.getIdLista())) {
+                it.setTasques(tl);
+                aux = repoLista.save(it);
+            }
+            return aux;
         }
-        return aux;
+        return lt;
     }
 
     //eliminar ítem per id
@@ -58,10 +62,13 @@ public class ServeiListas {
     }
 
     public Lista eliminarTasca(long idTasca, long idLista) {
-        Lista l = repoLista.getById(idLista);
-        l.getTasques().removeIf(t -> t.getIdTasca() == idTasca);
-        modificarLista(l);
-        return l;
+        Lista l = repoLista.findById(idLista).orElse(null);
+        if (l != null) {
+            l.getTasques().removeIf(t -> t.getIdTasca() == idTasca);
+            modificarLista(l);
+            return l;
+        }else
+            return l;
     }
 
     public Tasca consultarTasca(long id, long idLista){

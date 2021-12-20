@@ -47,6 +47,15 @@ public class ControladorUsuaris {
         }
     }
 
+    @PutMapping("/users")
+    public ResponseEntity<?> modificarLista(@RequestBody Usuari mod){
+        Usuari us = serveiUsuari.modificarUsuari(mod);
+        if (us != null)
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.notFound().build();
+    }
+
     public Usuari agefirLlista(Lista l, long id){
         return serveiUsuari.afegitLlista(l,id);
     }

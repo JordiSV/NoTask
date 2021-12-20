@@ -46,13 +46,8 @@ public class ControladorListas {
 
     @DeleteMapping("/todolists/{idLlista}")
     public ResponseEntity<?> eliminarLista(@PathVariable long idLlista){
-        Lista l = serveiListas.consultarLista(idLlista);
-        if (l == null)
-            return ResponseEntity.notFound().build();
-        else{
-            serveiListas.eliminarLista(idLlista);
-            return ResponseEntity.noContent().header("Content-Length", "0").build();
-        }
+        serveiListas.eliminarLista(idLlista);
+        return ResponseEntity.ok().build();
     }
 
     //per modificar una tasca existent
@@ -71,20 +66,28 @@ public class ControladorListas {
 
     @GetMapping("/users/{idUsuari}/todolists")
     public ResponseEntity<?> llistarLlistesUsuari(@PathVariable long idUsuari){
-        List<Lista> listas = serveiUsuari.consultarTotesLesLlistes(idUsuari);
-        if (listas != null){
-            return ResponseEntity.status(HttpStatus.OK).body(listas);
+        Usuari us = serveiUsuari.consultarUsuari(idUsuari);
+        if (us != null) {
+            List<Lista> listas = serveiUsuari.consultarTotesLesLlistes(idUsuari);
+            if (listas != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(listas);
+            } else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/users/{idUsuari}/todolists/{idLlista}")
     public ResponseEntity<?> consultarLlistaUsuari(@PathVariable long idUsuari, @PathVariable long idLlista){
-        Lista l = serveiUsuari.consultarLlista(idUsuari, idLlista);
-        if (l != null){
-            return ResponseEntity.status(HttpStatus.OK).body(l);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Usuari us = serveiUsuari.consultarUsuari(idUsuari);
+        if (us != null) {
+            Lista l = serveiUsuari.consultarLlista(idUsuari, idLlista);
+            if (l != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(l);
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PostMapping("/users/{idUsuari}/todolists")
@@ -100,23 +103,36 @@ public class ControladorListas {
 
     @DeleteMapping("/users/{idUsuari}/todolists/{idLlista}")
     public ResponseEntity<?> deleteLlistUsuari(@PathVariable long idUsuari, @PathVariable long idLlista){
-        Usuari us = serveiUsuari.eliminarLlista(idUsuari, idLlista);
-        if (us == null)
+        Usuari us = serveiUsuari.consultarUsuari(idUsuari);
+        if (us != null) {
+            Usuari us1 = serveiUsuari.eliminarLlista(idUsuari, idLlista);
+            if (us1 == null) {
+                return ResponseEntity.notFound().build();
+            } else {
+                Lista l = serveiListas.eliminarLista(idLlista);
+                if (l != null) {
+                    return ResponseEntity.noContent().header("Content-Length", "0").build();
+                }else{
+                    return ResponseEntity.notFound().build();
+                }
+            }
+        }else
             return ResponseEntity.notFound().build();
-        else{
-            Lista l = serveiListas.eliminarLista(idLlista);
-            return ResponseEntity.noContent().header("Content-Length", "0").build();
-        }
     }
 
     @PutMapping("/users/{idUsuari}/todolists")
     public ResponseEntity<?> modificarLlistaUsuari(@PathVariable long idUsuari, @RequestBody Lista mod){
-        Lista l = serveiListas.modificarLista(mod);
-        if (l != null){
-            Usuari us = serveiUsuari.modificarLlista(idUsuari, mod);
-            return ResponseEntity.ok().build();
-        }
-        else
+        Usuari us = serveiUsuari.consultarUsuari(idUsuari);
+        if (us != null) {
+            Lista l = serveiListas.modificarLista(mod);
+            if (l != null) {
+                Usuari us1 = serveiUsuari.modificarLlista(idUsuari, mod);
+                return ResponseEntity.ok().build();
+            } else
+                return ResponseEntity.notFound().build();
+        }else {
             return ResponseEntity.notFound().build();
+        }
+
     }
 }
