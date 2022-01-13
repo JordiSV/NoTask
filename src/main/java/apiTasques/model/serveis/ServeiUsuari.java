@@ -104,4 +104,18 @@ public class ServeiUsuari {
 
         return us;
     }
+
+//    public Usuari logInUser(long id){
+//        Usuari us = repoUsuari.getById(id);
+//
+//        us.setActive(true);
+//        return us;
+//    };
+//
+//    public Usuari logOutUser(long id){
+//        Usuari us = repoUsuari.getById(id);
+//
+//        us.setActive(false);
+//        return us;
+//    }
 }

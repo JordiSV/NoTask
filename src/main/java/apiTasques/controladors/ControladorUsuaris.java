@@ -56,6 +56,26 @@ public class ControladorUsuaris {
             return ResponseEntity.notFound().build();
     }
 
+//    @PutMapping("/user/login/{id}")
+//    public ResponseEntity<?> logInUser(@PathVariable long idUsuari){
+//        Usuari u = serveiUsuari.logInUser(idUsuari);
+//        if (u != null) {
+//            return ResponseEntity.ok().build();
+//        }else{
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+//
+//    @PutMapping("/user/logout/{id}")
+//    public ResponseEntity<?> logOutUser(@PathVariable long idUsuari){
+//        Usuari u = serveiUsuari.logOutUser(idUsuari);
+//        if (u != null) {
+//            return ResponseEntity.ok().build();
+//        }else{
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
     public Usuari agefirLlista(Lista l, long id){
         return serveiUsuari.afegitLlista(l,id);
     }

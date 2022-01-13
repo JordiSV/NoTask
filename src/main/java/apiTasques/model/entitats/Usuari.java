@@ -13,6 +13,7 @@ public class Usuari {
     private long idUsuari;
     private String userName;
     private String password;
+//    private boolean active = false;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lista> listas;
